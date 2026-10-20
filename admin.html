@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shelter Admin</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-shell">
+      <h1>Shelter Admin</h1>
+
+      <form id="admin-login-form" class="login-card">
+        <label for="admin-password">Password</label>
+        <input id="admin-password" type="password" placeholder="Enter admin password" />
+        <button type="submit">Open admin panel</button>
+      </form>
+
+      <section id="admin-panel" class="admin-panel hidden" aria-live="polite">
+        <div class="top-bar">
+          <h2>All kennel activity</h2>
+          <button id="logout-btn" type="button" class="secondary-btn">Log out</button>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <span>Total kennels</span>
+            <strong id="total-kennels">0</strong>
+          </div>
+          <div class="summary-box">
+            <span>Total walk logs</span>
+            <strong id="total-logs">0</strong>
+          </div>
+          <div class="summary-box">
+            <span>Latest activity</span>
+            <strong id="latest-activity">-</strong>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Kennel</th>
+                <th>Last walk</th>
+                <th>Name</th>
+                <th>Comment</th>
+              </tr>
+            </thead>
+            <tbody id="kennel-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="activity-wrap">
+          <h3>Recent activity log</h3>
+          <ul id="activity-log"></ul>
+        </div>
+      </section>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

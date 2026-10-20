@@ -1,0 +1,120 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.box-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.box {
+  width: 140px;
+  height: 120px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  color: #111;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  white-space: pre-line;
+  line-height: 1.2;
+  padding: 10px;
+}
+
+.box.default {
+  background: #dfefff;
+}
+
+.box.green {
+  background: #b9efb0;
+}
+
+.box.yellow {
+  background: #f7ec9a;
+}
+
+.box.red {
+  background: #f6a3a3;
+}
+
+.box:hover {
+  filter: brightness(0.97);
+}
+
+.box.clicked {
+  border-color: #111;
+}
+
+.logs,
+.delete-log {
+  position: absolute;
+  right: -8px;
+  width: 42px;
+  height: 28px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #fff;
+  color: #111;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.logs {
+  bottom: 28px;
+}
+
+.delete-log {
+  bottom: -8px;
+  background: #ffe3e3;
+}
+
+.page-log-btn,
+.page-admin-btn {
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.page-log-btn {
+  background: #111;
+  color: #fff;
+}
+
+.page-admin-btn {
+  background: #e9f6ff;
+  color: #111;
+  margin-left: 12px;
+}
+
+.page-log-btn,
+.page-admin-btn {
+  display: inline-block;
+}

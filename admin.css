@@ -1,0 +1,149 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+  color: #111;
+}
+
+.admin-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.login-card,
+.admin-panel {
+  background: #fff;
+  border: 2px solid #111;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.login-card {
+  max-width: 420px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-card label {
+  font-weight: bold;
+}
+
+.login-card input {
+  padding: 10px 12px;
+  border: 2px solid #111;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.login-card button,
+.secondary-btn {
+  padding: 10px 16px;
+  border: 2px solid #111;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.admin-panel {
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.secondary-btn {
+  background: #fff;
+  color: #111;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.summary-box {
+  border: 2px solid #111;
+  border-radius: 10px;
+  padding: 16px;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-box span {
+  font-size: 14px;
+  color: #333;
+}
+
+.summary-box strong {
+  font-size: 22px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 2px solid #111;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+th {
+  background: #f2f2f2;
+}
+
+.activity-wrap {
+  margin-top: 28px;
+}
+
+#activity-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#activity-log li {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fafafa;
+}
