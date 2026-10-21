@@ -314,6 +314,21 @@ document.getElementById('open-admin').addEventListener('click', function () {
   window.location.href = '/admin.html';
 });
 
+function refreshBoard() {
+  Promise.all([
+    loadActivityHistory(),
+    loadDogData()
+  ]);
+}
+
+document.getElementById('refresh-board').addEventListener('click', function () {
+  refreshBoard();
+});
+
+setInterval(function () {
+  refreshBoard();
+}, 5 * 60 * 1000);
+
 setInterval(function () {
   document.querySelectorAll('.box').forEach(function (box) {
     renderBox(box);
