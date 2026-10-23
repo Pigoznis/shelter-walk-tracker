@@ -1,11 +1,18 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: scroll;
+  overflow-y: auto;
+  min-width: 1500px;
+}
+
 body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
-  margin: 0;
-  padding: 20px;
   font-family: Arial, sans-serif;
   background: #f3f3f3;
 }
@@ -128,7 +135,8 @@ body {
 .container-map {
   position: relative;
   width: 1500px;
-  height: 3000px;
+  min-width: 1500px;
+  height: 2500px;
   padding: 10px;
   border: 5px solid gray;
   margin: 0;
@@ -141,6 +149,17 @@ body {
 }
 
 #b1 {
+  width: 120px;
+  height: 160px;
+}
+
+#b1_7wrapper {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+
+#b1_7 {
   width: 120px;
   height: 160px;
 }

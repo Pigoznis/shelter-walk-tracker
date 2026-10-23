@@ -73,34 +73,55 @@ function getStatusFromTimestamp(timestampValue) {
   return 'red';
 }
 
+function getBoxLabel(box) {
+  if (!box) {
+    return '';
+  }
+
+  var storedLabel = box.getAttribute('data-label');
+  if (storedLabel && storedLabel.trim()) {
+    return storedLabel.trim();
+  }
+
+  var text = (box.textContent || '').trim();
+  if (text) {
+    return text.split('\n')[0].trim();
+  }
+
+  return box.id || '';
+}
+
 function renderBox(box) {
   var history = boxHistory[box.id] || [];
   var latestEntry = history[history.length - 1];
+  var boxLabel = getBoxLabel(box);
 
   box.classList.remove('green', 'yellow', 'red', 'default');
 
   if (!latestEntry) {
-    box.textContent = box.id;
+    box.textContent = boxLabel || box.id;
     box.classList.add('default');
     box.classList.remove('clicked');
     return;
   }
 
   var timestampText = getDisplayTimestamp(latestEntry.timestamp);
-  box.textContent = box.id + '\n' + timestampText + '\n' + latestEntry.name;
+  box.textContent = boxLabel + '\n' + timestampText + '\n' + latestEntry.name;
   box.classList.add(getStatusFromTimestamp(latestEntry.timestamp));
   box.classList.add('clicked');
 }
 
 function showHistory(boxId) {
   var history = boxHistory[boxId] || [];
+  var box = document.getElementById(boxId);
+  var boxLabel = getBoxLabel(box) || boxId;
 
   if (history.length === 0) {
-    alert(boxId + ' has no logs yet.');
+    alert(boxLabel + ' has no logs yet.');
     return;
   }
 
-  var text = boxId + ' history:\n\n';
+  var text = boxLabel + ' history:\n\n';
   history.forEach(function (entry, index) {
     text += (index + 1) + ') ' + getDisplayTimestamp(entry.timestamp) + '\n';
     text += 'Name: ' + entry.name + '\n';
@@ -129,9 +150,11 @@ function showAllHistory() {
 
 function deleteLastLog(boxId) {
   var history = boxHistory[boxId] || [];
+  var box = document.getElementById(boxId);
+  var boxLabel = getBoxLabel(box) || boxId;
 
   if (history.length === 0) {
-    alert(boxId + ' has no logs to delete.');
+    alert(boxLabel + ' has no logs to delete.');
     return;
   }
 
@@ -140,9 +163,8 @@ function deleteLastLog(boxId) {
     deletedEntry: deletedEntry
   });
 
-  var box = document.getElementById(boxId);
   renderBox(box);
-  alert('Deleted last log for ' + boxId + '.');
+  alert('Deleted last log for ' + boxLabel + '.');
 }
 
 async function loadActivityHistory() {
@@ -265,23 +287,24 @@ async function deleteLastServerLog(boxId) {
 
 function bindBox(box) {
   var boxId = box.id;
+  var boxLabel = getBoxLabel(box);
   boxHistory[boxId] = [];
 
   box.addEventListener('click', function () {
     addGlobalHistory('box_click', boxId, { message: 'Big box clicked' });
 
-    var shouldRegister = confirm('Register a walk for ' + boxId + '?');
+    var shouldRegister = confirm('Register a walk for ' + boxLabel + '?');
     if (!shouldRegister) {
       addGlobalHistory('cancel_register', boxId, { status: 'no' });
       return;
     }
 
-    var name = prompt('Enter your name for ' + boxId + ':');
+    var name = prompt('Enter your name for ' + boxLabel + ':');
     if (name === null || name.trim() === '') {
       name = 'Unknown';
     }
 
-    var comment = prompt('Enter your comment for ' + boxId + ':');
+    var comment = prompt('Enter your comment for ' + boxLabel + ':');
     if (comment === null || comment.trim() === '') {
       comment = 'No comment';
     }
