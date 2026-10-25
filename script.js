@@ -1,5 +1,70 @@
 var boxHistory = {};
 var globalHistory = [];
+var disabledKennels = {};
+var stateHistory = {};
+
+function loadDisabledKennels() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('shelter-disabled-kennels') || '{}');
+    disabledKennels = saved && typeof saved === 'object' ? saved : {};
+  } catch (error) {
+    disabledKennels = {};
+  }
+}
+
+function saveDisabledKennels() {
+  localStorage.setItem('shelter-disabled-kennels', JSON.stringify(disabledKennels));
+}
+
+function loadStateHistory() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('shelter-kennel-state-history') || '{}');
+    if (saved && typeof saved === 'object') {
+      Object.keys(saved).forEach(function (boxId) {
+        if (!Array.isArray(boxHistory[boxId])) {
+          boxHistory[boxId] = [];
+        }
+        var entries = Array.isArray(saved[boxId]) ? saved[boxId] : [];
+        boxHistory[boxId] = boxHistory[boxId].concat(entries);
+      });
+    }
+  } catch (error) {
+    console.error('Failed to load state history:', error);
+  }
+}
+
+function saveStateHistory() {
+  var stateOnly = {};
+  Object.keys(boxHistory).forEach(function (boxId) {
+    var entries = (boxHistory[boxId] || []).filter(function (entry) {
+      return entry && entry.kind === 'state_change';
+    });
+    if (entries.length > 0) {
+      stateOnly[boxId] = entries;
+    }
+  });
+  localStorage.setItem('shelter-kennel-state-history', JSON.stringify(stateOnly));
+}
+
+function ensureToggleButtons() {
+  document.querySelectorAll('.box-wrapper').forEach(function (wrapper) {
+    var box = wrapper.querySelector('.box');
+    if (!box) {
+      return;
+    }
+
+    if (wrapper.querySelector('.toggle-disable')) {
+      return;
+    }
+
+    var toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.className = 'toggle-disable';
+    toggleBtn.id = box.id + 'toggle';
+    toggleBtn.textContent = 'on/off';
+    wrapper.appendChild(toggleBtn);
+  });
+}
 
 async function fetchJson(url, options) {
   var response = await fetch(url, options || {});
@@ -73,59 +138,129 @@ function getStatusFromTimestamp(timestampValue) {
   return 'red';
 }
 
-function getBoxLabel(box) {
-  if (!box) {
-    return '';
-  }
-
-  var storedLabel = box.getAttribute('data-label');
-  if (storedLabel && storedLabel.trim()) {
-    return storedLabel.trim();
-  }
-
-  var text = (box.textContent || '').trim();
-  if (text) {
-    return text.split('\n')[0].trim();
-  }
-
-  return box.id || '';
-}
-
 function renderBox(box) {
   var history = boxHistory[box.id] || [];
-  var latestEntry = history[history.length - 1];
-  var boxLabel = getBoxLabel(box);
+  var walkHistory = history.filter(function (entry) {
+    return entry.kind !== 'state_change';
+  });
+  var latestEntry = walkHistory[walkHistory.length - 1];
 
-  box.classList.remove('green', 'yellow', 'red', 'default');
+  box.classList.remove('green', 'yellow', 'red', 'default', 'disabled', 'clicked');
 
-  if (!latestEntry) {
-    box.textContent = boxLabel || box.id;
-    box.classList.add('default');
-    box.classList.remove('clicked');
+  if (disabledKennels[box.id]) {
+    box.textContent = box.id;
+    box.classList.add('disabled');
     return;
   }
 
-  var timestampText = getDisplayTimestamp(latestEntry.timestamp);
-  box.textContent = boxLabel + '\n' + timestampText + '\n' + latestEntry.name;
+  if (!latestEntry) {
+    box.textContent = box.id;
+    box.classList.add('default');
+    return;
+  }
+
+  box.textContent = box.id;
   box.classList.add(getStatusFromTimestamp(latestEntry.timestamp));
   box.classList.add('clicked');
 }
 
-function showHistory(boxId) {
-  var history = boxHistory[boxId] || [];
-  var box = document.getElementById(boxId);
-  var boxLabel = getBoxLabel(box) || boxId;
+function toggleDisableKennel(boxId) {
+  var isDisabled = !!disabledKennels[boxId];
+  var nextDisabledState = !isDisabled;
+  var action = nextDisabledState ? 'disable_kennel' : 'enable_kennel';
 
-  if (history.length === 0) {
-    alert(boxLabel + ' has no logs yet.');
+  var shouldProceed = confirm(
+    (nextDisabledState ? 'Do you want to disable' : 'Do you want to enable') + ' kennel ' + boxId + '?'
+  );
+
+  if (!shouldProceed) {
     return;
   }
 
-  var text = boxLabel + ' history:\n\n';
-  history.forEach(function (entry, index) {
+  var name = prompt('Enter your name for ' + boxId + ':');
+  if (name === null || name.trim() === '') {
+    name = 'Unknown';
+  }
+
+  var comment = prompt('Enter your comment for ' + boxId + ':');
+  if (comment === null || comment.trim() === '') {
+    comment = 'No comment';
+  }
+
+  disabledKennels[boxId] = nextDisabledState;
+  saveDisabledKennels();
+
+  var box = document.getElementById(boxId);
+  if (box) {
+    renderBox(box);
+  }
+
+  addGlobalHistory(action, boxId, {
+    name: name,
+    comment: comment,
+    disabled: nextDisabledState
+  });
+
+  var history = boxHistory[boxId] || [];
+  history.push({
+    timestamp: new Date().toISOString(),
+    name: name,
+    comment: comment + ' [kennel ' + (nextDisabledState ? 'disabled' : 'enabled') + ']',
+    disabled: nextDisabledState,
+    kind: 'state_change',
+    action: action
+  });
+  boxHistory[boxId] = history;
+
+  alert('Kennel ' + boxId + ' has been ' + (nextDisabledState ? 'disabled' : 'enabled') + '.');
+}
+
+function getKennelLogEntries(boxId) {
+  var localEntries = Array.isArray(boxHistory[boxId]) ? boxHistory[boxId].slice() : [];
+
+  var globalEntries = (Array.isArray(globalHistory) ? globalHistory : []).filter(function (entry) {
+    return String(entry.boxId) === String(boxId) && (
+      entry.action === 'disable_kennel' ||
+      entry.action === 'enable_kennel'
+    );
+  }).map(function (entry) {
+    var details = entry.details || {};
+    return {
+      timestamp: entry.timestamp,
+      name: details.name || 'Unknown',
+      comment: (details.comment || 'No comment') + ' [kennel ' + (entry.action === 'disable_kennel' ? 'disabled' : 'enabled') + ']',
+      kind: 'state_change',
+      action: entry.action
+    };
+  });
+
+  var savedEntries = [];
+  try {
+    var saved = JSON.parse(localStorage.getItem('shelter-kennel-state-history') || '{}');
+    savedEntries = Array.isArray(saved[boxId]) ? saved[boxId] : [];
+  } catch (error) {
+    savedEntries = [];
+  }
+
+  return localEntries.concat(globalEntries).concat(savedEntries);
+}
+
+function showHistory(boxId) {
+  var mergedHistory = getKennelLogEntries(boxId);
+  mergedHistory.sort(function (a, b) {
+    return new Date(a.timestamp) - new Date(b.timestamp);
+  });
+
+  if (mergedHistory.length === 0) {
+    alert(boxId + ' has no logs yet.');
+    return;
+  }
+
+  var text = boxId + ' history:\n\n';
+  mergedHistory.forEach(function (entry, index) {
     text += (index + 1) + ') ' + getDisplayTimestamp(entry.timestamp) + '\n';
-    text += 'Name: ' + entry.name + '\n';
-    text += 'Comment: ' + entry.comment + '\n\n';
+    text += 'Name: ' + (entry.name || 'Unknown') + '\n';
+    text += 'Comment: ' + (entry.comment || 'No comment') + '\n\n';
   });
 
   alert(text);
@@ -150,11 +285,9 @@ function showAllHistory() {
 
 function deleteLastLog(boxId) {
   var history = boxHistory[boxId] || [];
-  var box = document.getElementById(boxId);
-  var boxLabel = getBoxLabel(box) || boxId;
 
   if (history.length === 0) {
-    alert(boxLabel + ' has no logs to delete.');
+    alert(boxId + ' has no logs to delete.');
     return;
   }
 
@@ -163,8 +296,9 @@ function deleteLastLog(boxId) {
     deletedEntry: deletedEntry
   });
 
+  var box = document.getElementById(boxId);
   renderBox(box);
-  alert('Deleted last log for ' + boxLabel + '.');
+  alert('Deleted last log for ' + boxId + '.');
 }
 
 async function loadActivityHistory() {
@@ -287,24 +421,28 @@ async function deleteLastServerLog(boxId) {
 
 function bindBox(box) {
   var boxId = box.id;
-  var boxLabel = getBoxLabel(box);
   boxHistory[boxId] = [];
 
   box.addEventListener('click', function () {
+    if (disabledKennels[boxId]) {
+      alert('Kennel ' + boxId + ' is currently disabled. Use the on/off button to enable it.');
+      return;
+    }
+
     addGlobalHistory('box_click', boxId, { message: 'Big box clicked' });
 
-    var shouldRegister = confirm('Register a walk for ' + boxLabel + '?');
+    var shouldRegister = confirm('Register a walk for ' + boxId + '?');
     if (!shouldRegister) {
       addGlobalHistory('cancel_register', boxId, { status: 'no' });
       return;
     }
 
-    var name = prompt('Enter your name for ' + boxLabel + ':');
+    var name = prompt('Enter your name for ' + boxId + ':');
     if (name === null || name.trim() === '') {
       name = 'Unknown';
     }
 
-    var comment = prompt('Enter your comment for ' + boxLabel + ':');
+    var comment = prompt('Enter your comment for ' + boxId + ':');
     if (comment === null || comment.trim() === '') {
       comment = 'No comment';
     }
@@ -314,6 +452,7 @@ function bindBox(box) {
 
   var logsBtn = document.getElementById(boxId + 'logs');
   var deleteBtn = document.getElementById(boxId + 'delete');
+  var toggleBtn = document.getElementById(boxId + 'toggle');
 
   logsBtn.addEventListener('click', function () {
     addGlobalHistory('view_logs', boxId, { count: boxHistory[boxId].length });
@@ -325,12 +464,21 @@ function bindBox(box) {
     deleteLastServerLog(boxId);
   });
 
+  toggleBtn.addEventListener('click', function () {
+    toggleDisableKennel(boxId);
+  });
+
   renderBox(box);
 }
 
 document.querySelectorAll('.box').forEach(function (box) {
   bindBox(box);
 });
+
+loadDisabledKennels();
+loadStateHistory();
+ensureToggleButtons();
+initAdminControlsToggle();
 
 document.getElementById('show-all-history').addEventListener('click', showAllHistory);
 document.getElementById('open-admin').addEventListener('click', function () {
@@ -362,3 +510,27 @@ Promise.all([
   loadActivityHistory(),
   loadDogData()
 ]);
+
+function toggleAdminControls() {
+  var buttons = document.querySelectorAll('.toggle-disable');
+  var isHidden = buttons.length > 0 && Array.from(buttons).every(function (btn) {
+    return btn.style.display === 'none';
+  });
+
+  buttons.forEach(function (btn) {
+    btn.style.display = isHidden ? 'block' : 'none';
+  });
+}
+
+function initAdminControlsToggle() {
+  document.querySelectorAll('.toggle-disable').forEach(function (btn) {
+    btn.style.display = 'none';
+  });
+
+  var toggleButton = document.getElementById('show-admin-controls');
+  if (toggleButton) {
+    toggleButton.addEventListener('click', function () {
+      toggleAdminControls();
+    });
+  }
+}
