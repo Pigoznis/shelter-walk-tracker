@@ -138,28 +138,43 @@ function getStatusFromTimestamp(timestampValue) {
   return 'red';
 }
 
+function getBoxDisplayName(boxOrId) {
+  var box = typeof boxOrId === 'string' ? document.getElementById(boxOrId) : boxOrId;
+  if (box && box.dataset && box.dataset.name) {
+    return box.dataset.name;
+  }
+
+  var boxId = typeof boxOrId === 'string' ? boxOrId : (box && box.id ? box.id : 'Unknown');
+  return boxId;
+}
+
+function getBoxReferenceText(boxOrId) {
+  return getBoxDisplayName(boxOrId) + ' (' + (typeof boxOrId === 'string' ? boxOrId : (boxOrId && boxOrId.id ? boxOrId.id : 'unknown')) + ')';
+}
+
 function renderBox(box) {
   var history = boxHistory[box.id] || [];
   var walkHistory = history.filter(function (entry) {
     return entry.kind !== 'state_change';
   });
   var latestEntry = walkHistory[walkHistory.length - 1];
+  var displayName = getBoxDisplayName(box);
 
   box.classList.remove('green', 'yellow', 'red', 'default', 'disabled', 'clicked');
 
   if (disabledKennels[box.id]) {
-    box.textContent = box.id;
+    box.textContent = displayName;
     box.classList.add('disabled');
     return;
   }
 
   if (!latestEntry) {
-    box.textContent = box.id;
+    box.textContent = displayName;
     box.classList.add('default');
     return;
   }
 
-  box.textContent = box.id;
+  box.textContent = displayName;
   box.classList.add(getStatusFromTimestamp(latestEntry.timestamp));
   box.classList.add('clicked');
 }
@@ -168,21 +183,22 @@ function toggleDisableKennel(boxId) {
   var isDisabled = !!disabledKennels[boxId];
   var nextDisabledState = !isDisabled;
   var action = nextDisabledState ? 'disable_kennel' : 'enable_kennel';
+  var boxLabel = getBoxDisplayName(boxId);
 
   var shouldProceed = confirm(
-    (nextDisabledState ? 'Do you want to disable' : 'Do you want to enable') + ' kennel ' + boxId + '?'
+    (nextDisabledState ? 'Do you want to disable' : 'Do you want to enable') + ' kennel ' + boxLabel + '?'
   );
 
   if (!shouldProceed) {
     return;
   }
 
-  var name = prompt('Enter your name for ' + boxId + ':');
+  var name = prompt('Enter your name for ' + boxLabel + ':');
   if (name === null || name.trim() === '') {
     name = 'Unknown';
   }
 
-  var comment = prompt('Enter your comment for ' + boxId + ':');
+  var comment = prompt('Enter your comment for ' + boxLabel + ':');
   if (comment === null || comment.trim() === '') {
     comment = 'No comment';
   }
@@ -198,7 +214,8 @@ function toggleDisableKennel(boxId) {
   addGlobalHistory(action, boxId, {
     name: name,
     comment: comment,
-    disabled: nextDisabledState
+    disabled: nextDisabledState,
+    displayName: boxLabel
   });
 
   var history = boxHistory[boxId] || [];
@@ -208,15 +225,17 @@ function toggleDisableKennel(boxId) {
     comment: comment + ' [kennel ' + (nextDisabledState ? 'disabled' : 'enabled') + ']',
     disabled: nextDisabledState,
     kind: 'state_change',
-    action: action
+    action: action,
+    displayName: boxLabel
   });
   boxHistory[boxId] = history;
 
-  alert('Kennel ' + boxId + ' has been ' + (nextDisabledState ? 'disabled' : 'enabled') + '.');
+  alert('Kennel ' + boxLabel + ' has been ' + (nextDisabledState ? 'disabled' : 'enabled') + '.');
 }
 
 function getKennelLogEntries(boxId) {
   var localEntries = Array.isArray(boxHistory[boxId]) ? boxHistory[boxId].slice() : [];
+  var boxLabel = getBoxDisplayName(boxId);
 
   var globalEntries = (Array.isArray(globalHistory) ? globalHistory : []).filter(function (entry) {
     return String(entry.boxId) === String(boxId) && (
@@ -230,7 +249,8 @@ function getKennelLogEntries(boxId) {
       name: details.name || 'Unknown',
       comment: (details.comment || 'No comment') + ' [kennel ' + (entry.action === 'disable_kennel' ? 'disabled' : 'enabled') + ']',
       kind: 'state_change',
-      action: entry.action
+      action: entry.action,
+      displayName: details.displayName || boxLabel
     };
   });
 
@@ -247,16 +267,17 @@ function getKennelLogEntries(boxId) {
 
 function showHistory(boxId) {
   var mergedHistory = getKennelLogEntries(boxId);
+  var boxLabel = getBoxDisplayName(boxId);
   mergedHistory.sort(function (a, b) {
     return new Date(a.timestamp) - new Date(b.timestamp);
   });
 
   if (mergedHistory.length === 0) {
-    alert(boxId + ' has no logs yet.');
+    alert(boxLabel + ' has no logs yet.');
     return;
   }
 
-  var text = boxId + ' history:\n\n';
+  var text = boxLabel + ' history:\n\n';
   mergedHistory.forEach(function (entry, index) {
     text += (index + 1) + ') ' + getDisplayTimestamp(entry.timestamp) + '\n';
     text += 'Name: ' + (entry.name || 'Unknown') + '\n';
@@ -274,9 +295,10 @@ function showAllHistory() {
 
   var text = 'Full page history:\n\n';
   globalHistory.forEach(function (entry, index) {
+    var boxLabel = getBoxDisplayName(entry.boxId);
     text += (index + 1) + ') ' + entry.timestamp + '\n';
     text += 'Action: ' + entry.action + '\n';
-    text += 'Box: ' + entry.boxId + '\n';
+    text += 'Box: ' + boxLabel + '\n';
     text += 'Details: ' + JSON.stringify(entry.details) + '\n\n';
   });
 
@@ -285,20 +307,22 @@ function showAllHistory() {
 
 function deleteLastLog(boxId) {
   var history = boxHistory[boxId] || [];
+  var boxLabel = getBoxDisplayName(boxId);
 
   if (history.length === 0) {
-    alert(boxId + ' has no logs to delete.');
+    alert(boxLabel + ' has no logs to delete.');
     return;
   }
 
   var deletedEntry = history.pop();
   addGlobalHistory('delete_last_log', boxId, {
-    deletedEntry: deletedEntry
+    deletedEntry: deletedEntry,
+    displayName: boxLabel
   });
 
   var box = document.getElementById(boxId);
   renderBox(box);
-  alert('Deleted last log for ' + boxId + '.');
+  alert('Deleted last log for ' + boxLabel + '.');
 }
 
 async function loadActivityHistory() {
@@ -421,28 +445,29 @@ async function deleteLastServerLog(boxId) {
 
 function bindBox(box) {
   var boxId = box.id;
+  var boxLabel = getBoxDisplayName(box);
   boxHistory[boxId] = [];
 
   box.addEventListener('click', function () {
     if (disabledKennels[boxId]) {
-      alert('Kennel ' + boxId + ' is currently disabled. Use the on/off button to enable it.');
+      alert('Kennel ' + boxLabel + ' is currently disabled. Use the on/off button to enable it.');
       return;
     }
 
-    addGlobalHistory('box_click', boxId, { message: 'Big box clicked' });
+    addGlobalHistory('box_click', boxId, { message: 'Big box clicked', displayName: boxLabel });
 
-    var shouldRegister = confirm('Register a walk for ' + boxId + '?');
+    var shouldRegister = confirm('Register a walk for ' + boxLabel + '?');
     if (!shouldRegister) {
-      addGlobalHistory('cancel_register', boxId, { status: 'no' });
+      addGlobalHistory('cancel_register', boxId, { status: 'no', displayName: boxLabel });
       return;
     }
 
-    var name = prompt('Enter your name for ' + boxId + ':');
+    var name = prompt('Enter your name for ' + boxLabel + ':');
     if (name === null || name.trim() === '') {
       name = 'Unknown';
     }
 
-    var comment = prompt('Enter your comment for ' + boxId + ':');
+    var comment = prompt('Enter your comment for ' + boxLabel + ':');
     if (comment === null || comment.trim() === '') {
       comment = 'No comment';
     }
@@ -455,12 +480,12 @@ function bindBox(box) {
   var toggleBtn = document.getElementById(boxId + 'toggle');
 
   logsBtn.addEventListener('click', function () {
-    addGlobalHistory('view_logs', boxId, { count: boxHistory[boxId].length });
+    addGlobalHistory('view_logs', boxId, { count: boxHistory[boxId].length, displayName: boxLabel });
     showHistory(boxId);
   });
 
   deleteBtn.addEventListener('click', function () {
-    addGlobalHistory('delete_button_click', boxId, { message: 'Delete requested' });
+    addGlobalHistory('delete_button_click', boxId, { message: 'Delete requested', displayName: boxLabel });
     deleteLastServerLog(boxId);
   });
 
