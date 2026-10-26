@@ -46,7 +46,7 @@ body {
   gap: 8px;
   white-space: pre-line;
   line-height: 1.2;
-  padding: 8px 10px;
+  padding: 8px 10px 30px 10px;
 }
 
 .box.default {
@@ -78,17 +78,17 @@ body {
 .toggle-disable {
   position: absolute;
   right: -8px;
-  width: 36px;
-  height: 20px;
+  width: 32px;
+  height: 18px;
   border: 1px solid #333;
   border-radius: 4px;
   background: #fff;
   color: #111;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: bold;
   cursor: pointer;
   z-index: 2;
-  padding: 0;
+  padding: 0 2px;
   line-height: 1;
 }
 
@@ -102,8 +102,22 @@ body {
 }
 
 .toggle-disable {
-  bottom: -20px;
-  background: #eaf5ff;
+  position: absolute;
+  left: 8px;
+  right: auto;
+  bottom: 4px;
+  width: 32px;
+  height: 18px;
+  background: #f5b3b3;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #111;
+  font-size: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0 2px;
+  line-height: 1;
 }
 
 .box.disabled {
@@ -481,150 +495,150 @@ body {
 }
 
 #b29 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b30wrapper {
   position: absolute;
-  left: 130px;
+  left: 140px;
   bottom: 820px;
 }
 
 #b30 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b31wrapper {
   position: absolute;
-  left: 190px;
+  left: 210px;
   bottom: 820px;
 }
 
 #b31 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b32wrapper {
   position: absolute;
-  left: 250px;
+  left: 280px;
   bottom: 820px;
 }
 
 #b32 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b33wrapper {
   position: absolute;
-  left: 310px;
+  left: 350px;
   bottom: 820px;
 }
 
 #b33 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b34wrapper {
   position: absolute;
-  left: 370px;
+  left: 420px;
   bottom: 820px;
 }
 
 #b34 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b35wrapper {
   position: absolute;
-  left: 430px;
+  left: 490px;
   bottom: 820px;
 }
 
 #b35 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b36wrapper {
   position: absolute;
-  left: 490px;
+  left: 560px;
   bottom: 820px;
 }
 
 #b36 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b37wrapper {
   position: absolute;
-  left: 550px;
+  left: 630px;
   bottom: 820px;
 }
 
 #b37 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b38wrapper {
   position: absolute;
-  left: 610px;
+  left: 700px;
   bottom: 820px;
 }
 
 #b38 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b39wrapper {
   position: absolute;
-  left: 670px;
+  left: 770px;
   bottom: 820px;
 }
 
 #b39 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b40wrapper {
   position: absolute;
-  left: 730px;
+  left: 840px;
   bottom: 820px;
 }
 
 #b40 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b41wrapper {
   position: absolute;
-  left: 790px;
+  left: 910px;
   bottom: 820px;
 }
 
 #b41 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
 #b42wrapper {
   position: absolute;
-  left: 850px;
+  left: 980px;
   bottom: 820px;
 }
 
 #b42 {
-  width: 60px;
+  width: 70px;
   height: 160px;
 }
 
@@ -635,7 +649,7 @@ body {
 }
 
 #b43 {
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -646,7 +660,7 @@ body {
 }
 
 #b44 {
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -657,7 +671,7 @@ body {
 }
 
 #b45 {
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -668,7 +682,7 @@ body {
 }
 
 #b46 {
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -679,7 +693,7 @@ body {
 }
 
 #b47 {
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -712,51 +726,51 @@ body {
 }
 
 #b50 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b51wrapper {
   position: absolute;
-  left: 200px;
+  left: 210px;
   bottom: 1420px;
 }
 
 #b51 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b52wrapper {
   position: absolute;
-  left: 260px;
+  left: 280px;
   bottom: 1420px;
 }
 
 #b52 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b53wrapper {
   position: absolute;
-  left: 320px;
+  left: 350px;
   bottom: 1420px;
 }
 
 #b53 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b54wrapper {
   position: absolute;
-  left: 380px;
+  left: 420px;
   bottom: 1420px;
 }
 
 #b54 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
@@ -767,40 +781,40 @@ body {
 }
 
 #b55 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b56wrapper {
   position: absolute;
-  left: 180px;
+  left: 190px;
   bottom: 1020px;
 }
 
 #b56 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b57wrapper {
   position: absolute;
-  left: 240px;
+  left: 260px;
   bottom: 1020px;
 }
 
 #b57 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
 #b58wrapper {
   position: absolute;
-  left: 300px;
+  left: 330px;
   bottom: 1020px;
 }
 
 #b58 {
-  width: 60px;
+  width: 70px;
   height: 110px;
 }
 
@@ -877,7 +891,7 @@ body {
 }
 
 #b65 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -888,7 +902,7 @@ body {
 }
 
 #b66 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -899,7 +913,7 @@ body {
 }
 
 #b67 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -910,7 +924,7 @@ body {
 }
 
 #b68 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -921,7 +935,7 @@ body {
 }
 
 #b69 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -932,7 +946,7 @@ body {
 }
 
 #b70 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -943,7 +957,7 @@ body {
 }
 
 #b71 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -954,7 +968,7 @@ body {
 }
 
 #b72 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -965,7 +979,7 @@ body {
 }
 
 #b72 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -976,7 +990,7 @@ body {
 }
 
 #b73 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -987,7 +1001,7 @@ body {
 }
 
 #b74 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -998,7 +1012,7 @@ body {
 }
 
 #b75 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1009,7 +1023,7 @@ body {
 }
 
 #b76 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1020,7 +1034,7 @@ body {
 }
 
 #b77 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1031,7 +1045,7 @@ body {
 }
 
 #b78 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1042,7 +1056,7 @@ body {
 }
 
 #b79 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1053,7 +1067,7 @@ body {
 }
 
 #b80 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1064,7 +1078,7 @@ body {
 }
 
 #b81 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1075,7 +1089,7 @@ body {
 }
 
 #b82 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1086,7 +1100,7 @@ body {
 }
 
 #b83 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1097,7 +1111,7 @@ body {
 }
 
 #b84 {
-  width: 80px;
+  width: 90px;
   height: 50px;
 }
 
@@ -1108,7 +1122,7 @@ body {
 }
 
 #b85 {
-  width: 70px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1119,7 +1133,7 @@ body {
 }
 
 #b86 {
-  width: 70px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1130,7 +1144,7 @@ body {
 }
 
 #b87 {
-  width: 70px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1141,7 +1155,7 @@ body {
 }
 
 #b88 {
-  width: 140px;
+  width: 150px;
   height: 50px;
 }
 
@@ -1152,7 +1166,7 @@ body {
 }
 
 #b89 {
-  width: 70px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1163,7 +1177,7 @@ body {
 }
 
 #b90 {
-  width: 70px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1174,7 +1188,7 @@ body {
 }
 
 #b91 {
-  width: 70px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1185,18 +1199,18 @@ body {
 }
 
 #b92 {
-  width: 70px;
+  width: 80px;
   height: 50px;
 }
 
 #b93wrapper {
   position: absolute;
-  right: 180px;
+  right: 170px;
   bottom: 2100px;
 }
 
 #b93 {
-  width: 70px;
+  width: 80px;
   height: 50px;
 }
 
@@ -1207,7 +1221,7 @@ body {
 }
 
 #b94 {
-  width: 40px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1218,7 +1232,7 @@ body {
 }
 
 #b95 {
-  width: 40px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1229,7 +1243,7 @@ body {
 }
 
 #b96 {
-  width: 40px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1240,7 +1254,7 @@ body {
 }
 
 #b97 {
-  width: 40px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1251,18 +1265,18 @@ body {
 }
 
 #b98 {
-  width: 40px;
+  width: 80px;
   height: 60px;
 }
 
 #b99wrapper {
   position: absolute;
   right: 140px;
-  bottom: 2010px;
+  bottom: 2020px;
 }
 
 #b99 {
-  width: 40px;
+  width: 80px;
   height: 60px;
 }
 
@@ -1273,46 +1287,46 @@ body {
 }
 
 #b100 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b101wrapper {
   position: absolute;
-  left: 200px;
+  left: 210px;
   bottom: 1800px;
 }
 
 #b101 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b102wrapper {
   position: absolute;
-  left: 260px;
+  left: 280px;
   bottom: 1800px;
 }
 
 #b102 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b103wrapper {
   position: absolute;
-  left: 320px;
+  left: 350px;
   bottom: 1800px;
 }
 
 #b103 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b104wrapper {
   position: absolute;
-  left: 380px;
+  left: 420px;
   bottom: 1800px;
 }
 
@@ -1394,62 +1408,62 @@ body {
 }
 
 #b111 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b112wrapper {
   position: absolute;
-  left: 200px;
+  left: 210px;
   bottom: 2360px;
 }
 
 #b112 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b113wrapper {
   position: absolute;
-  left: 260px;
+  left: 280px;
   bottom: 2360px;
 }
 
 #b113 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b114wrapper {
   position: absolute;
-  left: 320px;
+  left: 350px;
   bottom: 2360px;
 }
 
 #b114 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b115wrapper {
   position: absolute;
-  left: 380px;
+  left: 420px;
   bottom: 2360px;
 }
 
 #b115 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 
 #b116wrapper {
   position: absolute;
-  left: 440px;
+  left: 490px;
   bottom: 2360px;
 }
 
 #b116 {
-  width: 60px;
+  width: 70px;
   height: 100px;
 }
 

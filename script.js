@@ -160,12 +160,12 @@ function getStatusFromTimestamp(timestampValue) {
     return 'default';
   }
 
-  var ageInSeconds = (Date.now() - date.getTime()) / 1000;
+  var ageInDays = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
 
-  if (ageInSeconds < 5) {
+  if (ageInDays < 7) {
     return 'green';
   }
-  if (ageInSeconds <= 30) {
+  if (ageInDays < 30) {
     return 'yellow';
   }
 
@@ -579,7 +579,7 @@ document.getElementById('refresh-board').addEventListener('click', function () {
 
 setInterval(function () {
   refreshBoard();
-}, 5 * 60 * 1000);
+}, 60 * 60 * 1000);
 
 setInterval(function () {
   document.querySelectorAll('.box').forEach(function (box) {
