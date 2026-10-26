@@ -1117,7 +1117,7 @@ body {
 
 #b85wrapper {
   position: absolute;
-  right: 70px;
+  right: 60px;
   bottom: 2130px;
 }
 
@@ -1128,7 +1128,7 @@ body {
 
 #b86wrapper {
   position: absolute;
-  right: 70px;
+  right: 60px;
   bottom: 2190px;
 }
 
@@ -1139,7 +1139,7 @@ body {
 
 #b87wrapper {
   position: absolute;
-  right: 70px;
+  right: 60px;
   bottom: 2250px;
 }
 
@@ -1155,13 +1155,13 @@ body {
 }
 
 #b88 {
-  width: 150px;
+  width: 140px;
   height: 50px;
 }
 
 #b89wrapper {
   position: absolute;
-  right: 350px;
+  right: 400px;
   bottom: 2130px;
 }
 
@@ -1172,7 +1172,7 @@ body {
 
 #b90wrapper {
   position: absolute;
-  right: 350px;
+  right: 400px;
   bottom: 2190px;
 }
 
@@ -1183,7 +1183,7 @@ body {
 
 #b91wrapper {
   position: absolute;
-  right: 350px;
+  right: 400px;
   bottom: 2250px;
 }
 
@@ -1658,4 +1658,200 @@ body {
 .box.palacio:hover {
   border-color: #123a92;
   color: #123a92;
+}
+
+#visual-box-storage {
+  position: absolute;
+  left: 860px;
+  bottom: 20px;
+  width: 100px;
+  height: 156px;
+  border: 2px solid #000;
+  background: transparent;
+  z-index: 1;
+}
+
+#visual-box-office {
+  position: absolute;
+  left: 1120px;
+  bottom: 1806px;
+  width: 256px;
+  height: 90px;
+  border: 2px solid #000;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #000;
+  z-index: 1;
+}
+
+#visual-box-clinic {
+  position: absolute;
+  left: 1120px;
+  bottom: 1712px;
+  width: 256px;
+  height: 90px;
+  border: 2px solid #000;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #000;
+  z-index: 1;
+}
+
+#visual-box-wc {
+  position: absolute;
+  left: 1326px;
+  bottom: 1806px;
+  width: 50px;
+  height: 70px;
+  border: 2px solid #000;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #000;
+  z-index: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  line-height: 1;
+}
+
+#visual-box-food {
+  position: absolute;
+  left: 1066px;
+  bottom: 1900px;
+  width: 50px;
+  height: 176px;
+  border: 2px solid #000;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: 700;
+  color: #000;
+  z-index: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  line-height: 1;
+}
+
+#visual-box-no_go {
+  position: absolute;
+  left: 300px;
+  bottom: 2100px;
+  width: 196px;
+  height: 96px;
+  border: 2px solid #000;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #000;
+  z-index: 1;
+}
+
+#visual-box-grey1 {
+  position: absolute;
+  left: 1120px;
+  bottom: 1900px;
+  width: 260px;
+  height: 460px;
+  border: none;
+  background: #d9d9d9;
+  z-index: -1;
+}
+
+#visual-box-grey2 {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 1520px;
+  height: 30px;
+  border: none;
+  background: #d9d9d9;
+  z-index: -1;
+}
+
+#visual-box-grey3 {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 480px;
+  height: 210px;
+  border: none;
+  background: #d9d9d9;
+  z-index: -1;
+}
+
+#visual-box-grey4 {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 140px;
+  height: 1000px;
+  border: none;
+  background: #d9d9d9;
+  z-index: -1;
+}
+
+#visual-box-grey5 {
+  position: absolute;
+  left: 0px;
+  top: 700px;
+  width: 600px;
+  height: 290px;
+  border: none;
+  background: #d9d9d9;
+  z-index: -1;
+}
+
+#visual-box-pink {
+  position: absolute;
+  left: 0px;
+  top: 1000px;
+  width: 120px;
+  height: 500px;
+  border: none;
+  background: #caa1b2;
+  z-index: -1;
+}
+
+#visual-box-quarantine {
+  position: absolute;
+  left: 400px;
+  top: 1390px;
+  width: 290px;
+  height: 110px;
+  border: none;
+  background: #caa1b2;
+  z-index: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #b84d7a;
+}
+
+#visual-box-colars {
+  position: absolute;
+  left: 600px;
+  bottom: 1530px;
+  width: 100px;
+  height: 156px;
+  border: 2px solid #000;
+  background: transparent;
+  z-index: 1;
 }
