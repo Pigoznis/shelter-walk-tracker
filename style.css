@@ -1499,3 +1499,163 @@ body {
   width: 200px;
   height: 50px;
 }
+
+.map-arrow-green {
+  position: absolute;
+  right: 250px;
+  bottom: 100px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#text_entrance {
+  position: absolute;
+  right: 230px;
+  bottom: 34px;
+  font-size: 38px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+#text_beni {
+  position: absolute;
+  right: 500px;
+  bottom: 420px;
+  font-size: 60px;
+  font-weight: 700;
+  color: #0c5db7;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+#text_parque1 {
+  position: absolute;
+  left: 70px;
+  bottom: 2000px;
+  font-size: 62px;
+  font-weight: 800;
+  color: #0c5e38;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+#text_parque2 {
+  position: absolute;
+  left: 250px;
+  bottom: 1220px;
+  font-size: 60px;
+  font-weight: 700;
+  color: #b84d7a;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+#text_campito {
+  position: absolute;
+  right: 100px;
+  bottom: 1200px;
+  font-size: 62px;
+  font-weight: 800;
+  color: #f28b00;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+#text_palacio {
+  position: absolute;
+  right: 250px;
+  bottom: 1910px;
+  font-size: 40px;
+  font-weight: 800;
+  color: #123a92;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+#text_tunnel {
+  position: absolute;
+  left: 80px;
+  bottom: 1090px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #b84d7a;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+.box.beni {
+  border-color: #0c5db7;
+  color: #0c5db7;
+}
+
+.box.beni:hover {
+  border-color: #0c5db7;
+  color: #0c5db7;
+}
+
+.box.tunnel {
+  border-color: #b84d7a;
+  color: #b84d7a;
+}
+
+.box.tunnel:hover {
+  border-color: #b84d7a;
+  color: #b84d7a;
+}
+
+.box.parque2 {
+  border-color: #b84d7a;
+  color: #b84d7a;
+}
+
+.box.parque2:hover {
+  border-color: #b84d7a;
+  color: #b84d7a;
+}
+
+.box.campito {
+  border-color: #f28b00;
+  color: #f28b00;
+}
+
+.box.campito:hover {
+  border-color: #f28b00;
+  color: #f28b00;
+}
+
+.box.parque1 {
+  border-color: #0c5e38;
+  color: #0c5e38;
+}
+
+.box.parque1:hover {
+  border-color: #0c5e38;
+  color: #0c5e38;
+}
+
+.box.palacio {
+  border-color: #123a92;
+  color: #123a92;
+}
+
+.box.palacio:hover {
+  border-color: #123a92;
+  color: #123a92;
+}
