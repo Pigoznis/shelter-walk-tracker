@@ -3,6 +3,44 @@ var globalHistory = [];
 var disabledKennels = {};
 var stateHistory = {};
 
+async function loadDisabledKennelsFromServer() {
+  try {
+    var rows = await fetchJson('/api/kennel-state');
+    disabledKennels = {};
+
+    rows.forEach(function (row) {
+      if (row && row.kennel_id) {
+        disabledKennels[row.kennel_id] = !!row.disabled;
+      }
+    });
+
+    saveDisabledKennels();
+  } catch (error) {
+    console.error('Failed to load disabled kennel state from server:', error);
+  }
+}
+
+async function saveDisabledKennelsToServer(boxId, nextDisabledState, name, comment) {
+  try {
+    await fetchJson('/api/kennel-state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        kennel_id: boxId,
+        disabled: nextDisabledState,
+        name: name,
+        comment: comment
+      })
+    });
+  } catch (error) {
+    console.error('Failed to save kennel state to server:', error);
+  }
+}
+
+function saveDisabledKennels() {
+  localStorage.setItem('shelter-disabled-kennels', JSON.stringify(disabledKennels));
+}
+
 function loadDisabledKennels() {
   try {
     var saved = JSON.parse(localStorage.getItem('shelter-disabled-kennels') || '{}');
@@ -10,10 +48,6 @@ function loadDisabledKennels() {
   } catch (error) {
     disabledKennels = {};
   }
-}
-
-function saveDisabledKennels() {
-  localStorage.setItem('shelter-disabled-kennels', JSON.stringify(disabledKennels));
 }
 
 function loadStateHistory() {
@@ -205,6 +239,7 @@ function toggleDisableKennel(boxId) {
 
   disabledKennels[boxId] = nextDisabledState;
   saveDisabledKennels();
+  saveDisabledKennelsToServer(boxId, nextDisabledState, name, comment);
 
   var box = document.getElementById(boxId);
   if (box) {
@@ -231,6 +266,17 @@ function toggleDisableKennel(boxId) {
   boxHistory[boxId] = history;
 
   alert('Kennel ' + boxLabel + ' has been ' + (nextDisabledState ? 'disabled' : 'enabled') + '.');
+}
+
+async function refreshGlobalKennelStates() {
+  try {
+    await loadDisabledKennelsFromServer();
+    document.querySelectorAll('.box').forEach(function (box) {
+      renderBox(box);
+    });
+  } catch (error) {
+    console.error('Failed to refresh global kennel state:', error);
+  }
 }
 
 function getKennelLogEntries(boxId) {
@@ -502,20 +548,30 @@ document.querySelectorAll('.box').forEach(function (box) {
 
 loadDisabledKennels();
 loadStateHistory();
+Promise.all([
+  loadDisabledKennelsFromServer(),
+  loadActivityHistory(),
+  loadDogData()
+]);
 ensureToggleButtons();
 initAdminControlsToggle();
+
+function refreshBoard() {
+  Promise.all([
+    loadDisabledKennelsFromServer(),
+    loadActivityHistory(),
+    loadDogData()
+  ]).then(function () {
+    document.querySelectorAll('.box').forEach(function (box) {
+      renderBox(box);
+    });
+  });
+}
 
 document.getElementById('show-all-history').addEventListener('click', showAllHistory);
 document.getElementById('open-admin').addEventListener('click', function () {
   window.location.href = '/admin.html';
 });
-
-function refreshBoard() {
-  Promise.all([
-    loadActivityHistory(),
-    loadDogData()
-  ]);
-}
 
 document.getElementById('refresh-board').addEventListener('click', function () {
   refreshBoard();

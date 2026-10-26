@@ -36,6 +36,16 @@ async function initDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS kennel_state (
+      id SERIAL PRIMARY KEY,
+      kennel_id TEXT UNIQUE NOT NULL,
+      disabled BOOLEAN NOT NULL DEFAULT false,
+      updated_at TIMESTAMPTZ DEFAULT NOW(),
+      details JSONB DEFAULT '{}'::jsonb
+    )
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS walk_logs (
       id SERIAL PRIMARY KEY,
       kennel_id TEXT NOT NULL,
@@ -78,6 +88,51 @@ async function ensureDog(kennelId, displayName) {
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, message: 'Shelter API is running' });
+});
+
+app.get('/api/kennel-state', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT kennel_id, disabled, details, updated_at FROM kennel_state ORDER BY kennel_id ASC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error loading kennel state:', error);
+    res.status(500).json({ error: 'Failed to load kennel state' });
+  }
+});
+
+app.post('/api/kennel-state', async (req, res) => {
+  const { kennel_id, disabled, name, comment } = req.body || {};
+
+  if (!kennel_id) {
+    return res.status(400).json({ error: 'kennel_id is required' });
+  }
+
+  try {
+    await ensureDog(kennel_id, kennel_id);
+
+    const details = {
+      name: name || 'Unknown',
+      comment: comment || 'No comment',
+      disabled: !!disabled,
+      updated_at: new Date().toISOString()
+    };
+
+    await pool.query(
+      `INSERT INTO kennel_state (kennel_id, disabled, details, updated_at)
+       VALUES ($1, $2, $3::jsonb, NOW())
+       ON CONFLICT (kennel_id)
+       DO UPDATE SET disabled = EXCLUDED.disabled, details = EXCLUDED.details, updated_at = NOW()`,
+
+      [kennel_id, !!disabled, JSON.stringify(details)]
+    );
+
+    res.status(201).json({ ok: true, kennel_id, disabled: !!disabled, details });
+  } catch (error) {
+    console.error('Error saving kennel state:', error);
+    res.status(500).json({ error: 'Failed to save kennel state' });
+  }
 });
 
 app.get('/api/activity', async (req, res) => {
