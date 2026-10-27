@@ -117,7 +117,8 @@ table {
   background: #fff;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 12px 14px;
   border-bottom: 1px solid #ddd;

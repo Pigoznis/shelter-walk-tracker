@@ -163,6 +163,117 @@ body {
   margin-left: 12px;
 }
 
+.history-dialog {
+  width: min(900px, calc(100vw - 32px));
+  max-width: none;
+  max-height: 88vh;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  color: #172033;
+  background: #f8fafc;
+  box-shadow: 0 20px 60px rgb(15 23 42 / 30%);
+}
+
+.history-dialog::backdrop {
+  background: rgb(15 23 42 / 55%);
+}
+
+.history-dialog-content {
+  display: flex;
+  max-height: 88vh;
+  flex-direction: column;
+}
+
+.history-dialog-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #dbe2ea;
+  background: #fff;
+}
+
+.history-dialog-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.history-summary {
+  margin: 6px 0 0;
+  color: #526174;
+  font-size: 14px;
+}
+
+.history-close-btn {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #172033;
+  background: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.history-list {
+  display: grid;
+  gap: 10px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 16px 24px 24px;
+  list-style: none;
+}
+
+.history-item {
+  padding: 14px 16px;
+  border: 1px solid #dbe2ea;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.history-item-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.history-action {
+  color: #172033;
+  font-size: 15px;
+}
+
+.history-timestamp {
+  flex: 0 0 auto;
+  color: #526174;
+  font-size: 13px;
+}
+
+.history-box,
+.history-detail {
+  margin: 4px 0 0;
+  color: #344256;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.history-box {
+  font-weight: 600;
+}
+
+.history-detail-label {
+  color: #526174;
+  font-weight: 600;
+}
+
 .page-log-btn,
 .page-refresh-btn,
 .page-admin-btn,
@@ -1854,4 +1965,21 @@ body {
   border: 2px solid #000;
   background: transparent;
   z-index: 1;
+}
+
+#visual-box-cats {
+  position: absolute;
+  left: 1040px;
+  top: 100px;
+  width: 340px;
+  height: 110px;
+  border: none;
+  background: #614cda;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
 }
