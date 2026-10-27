@@ -333,13 +333,42 @@ function getKennelLogEntries(boxId) {
 
   var globalEntries = (Array.isArray(globalHistory) ? globalHistory : [])
     .filter(function (entry) {
+      var details = entry.details || {};
       return (
         String(entry.boxId) === String(boxId) &&
-        (entry.action === "disable_kennel" || entry.action === "enable_kennel")
+        (entry.action === "register_walk" ||
+          entry.action === "disable_kennel" ||
+          entry.action === "enable_kennel" ||
+          (entry.action === "delete_last_log" &&
+            details.deletedEntry &&
+            typeof details.deletedEntry === "object"))
       );
     })
     .map(function (entry) {
       var details = entry.details || {};
+      if (entry.action === "register_walk") {
+        return {
+          timestamp: details.timestamp || entry.timestamp,
+          name: details.name || "Unknown",
+          comment: details.comment || "No comment",
+          kind: "registered_walk",
+          action: entry.action,
+        };
+      }
+
+      if (entry.action === "delete_last_log") {
+        var deletedEntry = details.deletedEntry;
+        return {
+          timestamp: entry.timestamp,
+          name: deletedEntry.name || "Unknown",
+          comment: deletedEntry.comment || "No comment",
+          kind: "deleted_walk",
+          action: entry.action,
+          walkTimestamp: deletedEntry.timestamp,
+          deletedBy: details.name,
+        };
+      }
+
       return {
         timestamp: entry.timestamp,
         name: details.name || "Unknown",
@@ -353,6 +382,29 @@ function getKennelLogEntries(boxId) {
         displayName: details.displayName || boxLabel,
       };
     });
+
+  var registeredWalkKeys = globalEntries
+    .filter(function (entry) {
+      return entry.kind === "registered_walk";
+    })
+    .map(function (entry) {
+      var timestamp = new Date(entry.timestamp).getTime();
+      return [
+        isNaN(timestamp) ? entry.timestamp : timestamp,
+        entry.name,
+        entry.comment,
+      ].join("|");
+    });
+
+  localEntries = localEntries.filter(function (entry) {
+    var timestamp = new Date(entry.timestamp).getTime();
+    var key = [
+      isNaN(timestamp) ? entry.timestamp : timestamp,
+      entry.name || "Unknown",
+      entry.comment || "No comment",
+    ].join("|");
+    return registeredWalkKeys.indexOf(key) === -1;
+  });
 
   var savedEntries = [];
   try {
@@ -370,35 +422,102 @@ function getKennelLogEntries(boxId) {
 function showHistory(boxId) {
   var mergedHistory = getKennelLogEntries(boxId);
   var boxLabel = getBoxDisplayName(boxId);
+  var historyTitle = document.getElementById("history-title");
+  var historySummary = document.getElementById("history-summary");
+  var historyList = document.getElementById("history-list");
+  var historyDialog = document.getElementById("history-dialog");
+
   mergedHistory.sort(function (a, b) {
-    return new Date(a.timestamp) - new Date(b.timestamp);
+    return new Date(b.timestamp) - new Date(a.timestamp);
   });
 
-  if (mergedHistory.length === 0) {
-    alert(boxLabel + " has no logs yet.");
-    return;
-  }
+  historyTitle.textContent = boxLabel + " history";
+  historySummary.textContent =
+    mergedHistory.length +
+    (mergedHistory.length === 1 ? " entry" : " entries") +
+    " · newest first";
+  historyList.replaceChildren();
 
-  var text = boxLabel + " history:\n\n";
-  mergedHistory.forEach(function (entry, index) {
-    text += index + 1 + ") " + getDisplayTimestamp(entry.timestamp) + "\n";
-    text += "Name: " + (entry.name || "Unknown") + "\n";
-    text += "Comment: " + (entry.comment || "No comment") + "\n\n";
+  mergedHistory.forEach(function (entry) {
+    var item = document.createElement("li");
+    item.className = "history-item";
+
+    var header = document.createElement("div");
+    header.className = "history-item-header";
+
+    var action = document.createElement("strong");
+    action.className = "history-action";
+    action.textContent =
+      entry.kind === "state_change"
+        ? getHistoryActionLabel(entry.action)
+        : entry.kind === "deleted_walk"
+          ? "Last walk deleted"
+          : "Walk registered";
+    header.appendChild(action);
+
+    var timestamp = document.createElement("time");
+    timestamp.className = "history-timestamp";
+    timestamp.textContent = getDisplayTimestamp(entry.timestamp);
+    var parsedTimestamp = new Date(entry.timestamp);
+    if (!isNaN(parsedTimestamp.getTime())) {
+      timestamp.dateTime = parsedTimestamp.toISOString();
+    }
+    header.appendChild(timestamp);
+    item.appendChild(header);
+
+    var kennel = document.createElement("p");
+    kennel.className = "history-box";
+    kennel.textContent = "Kennel: " + boxLabel;
+    item.appendChild(kennel);
+
+    var fields = [
+      ["Name", entry.name || "Unknown"],
+      ["Comment", entry.comment || "No comment"],
+    ];
+    if (entry.walkTimestamp) {
+      fields.push(["Walk date", getDisplayTimestamp(entry.walkTimestamp)]);
+    }
+    if (entry.deletedBy) {
+      fields.push(["Deleted by", entry.deletedBy]);
+    }
+
+    fields.forEach(function (field) {
+      var detail = document.createElement("p");
+      detail.className = "history-detail";
+      var label = document.createElement("span");
+      label.className = "history-detail-label";
+      label.textContent = field[0] + ": ";
+      detail.appendChild(label);
+      detail.appendChild(document.createTextNode(String(field[1])));
+      item.appendChild(detail);
+    });
+
+    historyList.appendChild(item);
   });
 
-  alert(text);
+  historyDialog.showModal();
 }
 
 function showAllHistory() {
-  if (globalHistory.length === 0) {
+  var visibleHistory = globalHistory.filter(function (entry) {
+    return (
+      entry.action !== "box_click" &&
+      entry.action !== "cancel_register" &&
+      entry.action !== "view_logs" &&
+      entry.action !== "delete_button_click"
+    );
+  });
+
+  if (visibleHistory.length === 0) {
     alert("No page activity has been recorded yet.");
     return;
   }
 
   var historyList = document.getElementById("history-list");
+  document.getElementById("history-title").textContent = "Full page history";
   var historySummary = document.getElementById("history-summary");
   var historyDialog = document.getElementById("history-dialog");
-  var sortedHistory = globalHistory.slice().sort(function (a, b) {
+  var sortedHistory = visibleHistory.sort(function (a, b) {
     return new Date(b.timestamp) - new Date(a.timestamp);
   });
 
@@ -627,7 +746,7 @@ async function persistWalk(boxId, name, comment) {
   }
 }
 
-async function deleteLastServerLog(boxId) {
+async function deleteLastServerLog(boxId, name) {
   try {
     var result = await fetchJson("/api/walks/" + boxId + "/last", {
       method: "DELETE",
@@ -636,6 +755,7 @@ async function deleteLastServerLog(boxId) {
     await loadBoxHistory(boxId);
 
     addGlobalHistory("delete_last_log", boxId, {
+      name: name,
       deletedEntry: result.deleted,
     });
 
@@ -702,11 +822,22 @@ function bindBox(box) {
   });
 
   deleteBtn.addEventListener("click", function () {
-    addGlobalHistory("delete_button_click", boxId, {
-      message: "Delete requested",
-      displayName: boxLabel,
-    });
-    deleteLastServerLog(boxId);
+    var shouldDelete = confirm(
+      "Do you want to delete the last log from " + boxLabel + "?",
+    );
+    if (!shouldDelete) {
+      return;
+    }
+
+    var name = prompt("Enter your name for " + boxLabel + ":");
+    if (name === null) {
+      return;
+    }
+    if (name.trim() === "") {
+      name = "Unknown";
+    }
+
+    deleteLastServerLog(boxId, name);
   });
 
   toggleBtn.addEventListener("click", function () {
