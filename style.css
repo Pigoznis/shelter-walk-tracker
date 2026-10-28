@@ -168,15 +168,15 @@ body {
   max-width: none;
   max-height: 88vh;
   padding: 0;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  color: #172033;
-  background: #f8fafc;
-  box-shadow: 0 20px 60px rgb(15 23 42 / 30%);
+  border: 2px solid #222;
+  border-radius: 0;
+  color: #111;
+  background: #fff;
+  box-shadow: none;
 }
 
 .history-dialog::backdrop {
-  background: rgb(15 23 42 / 55%);
+  background: rgb(0 0 0 / 45%);
 }
 
 .history-dialog-content {
@@ -192,19 +192,19 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  padding: 20px 24px;
-  border-bottom: 1px solid #dbe2ea;
-  background: #fff;
+  padding: 14px 18px;
+  border-bottom: 2px solid #222;
+  background: #eee;
 }
 
 .history-dialog-header h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .history-summary {
   margin: 6px 0 0;
-  color: #526174;
+  color: #333;
   font-size: 14px;
 }
 
@@ -212,9 +212,9 @@ body {
   flex: 0 0 auto;
   width: 36px;
   height: 36px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  color: #172033;
+  border: 1px solid #222;
+  border-radius: 0;
+  color: #111;
   background: #fff;
   font-size: 24px;
   line-height: 1;
@@ -223,17 +223,17 @@ body {
 
 .history-list {
   display: grid;
-  gap: 10px;
+  gap: 6px;
   overflow-y: auto;
   margin: 0;
-  padding: 16px 24px 24px;
+  padding: 12px 18px 18px;
   list-style: none;
 }
 
 .history-item {
-  padding: 14px 16px;
-  border: 1px solid #dbe2ea;
-  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid #555;
+  border-radius: 0;
   background: #fff;
 }
 
@@ -246,20 +246,20 @@ body {
 }
 
 .history-action {
-  color: #172033;
+  color: #111;
   font-size: 15px;
 }
 
 .history-timestamp {
   flex: 0 0 auto;
-  color: #526174;
+  color: #333;
   font-size: 13px;
 }
 
 .history-box,
 .history-detail {
   margin: 4px 0 0;
-  color: #344256;
+  color: #333;
   font-size: 14px;
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -270,7 +270,7 @@ body {
 }
 
 .history-detail-label {
-  color: #526174;
+  color: #333;
   font-weight: 600;
 }
 
